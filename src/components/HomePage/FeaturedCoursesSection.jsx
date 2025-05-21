@@ -12,7 +12,7 @@ function FeaturedCoursesSection() {
     const [courses, setCourses] = useState([]);
     const [error, setError] = useState(null); 
     const Navigate = useNavigate();
-      const { userId, authToken} = useUserContext(); 
+    const { userId, authToken, userRole } = useUserContext(); // Add userRole to destructuring
 
     useEffect(() => {
         const fetchCourses = async () => {
@@ -65,12 +65,14 @@ function FeaturedCoursesSection() {
                 {courses.map(course => (
                     <div key={course.courseId} className="course-card">
                         <CourseCard course={course} image={course.image} />
-                        <button
-                            onClick={() => handleEnroll(course.courseId)}
-                            className="btn btn-primary mt-2"
-                        >
-                            Enroll
-                        </button>
+                        {userRole !== "ROLE_INSTRUCTOR" && ( // Show enroll button only if the user is not an instructor
+                            <button
+                                onClick={() => handleEnroll(course.courseId)}
+                                className="btn btn-primary mt-2"
+                            >
+                                Enroll
+                            </button>
+                        )}
                     </div>
                 ))}
             </div>

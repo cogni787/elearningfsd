@@ -25,7 +25,9 @@ function Header({ onLogout, showAuthButtons = true }) {
         if (onLogout) {
             onLogout();
         }
-        setShowLogoutModal(true); // Show logout modal
+        setShowLogoutModal(true);
+        setTimeout(()=>{ window.location.reload() },3000);
+        // Show logout modal
     };
 
     const getMyCoursesPath = () => {

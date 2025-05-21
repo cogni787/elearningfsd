@@ -9,7 +9,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class GlobalExceptionHandler{
 
-	
+	@ExceptionHandler(UserAlReadyExist.class)
+	public ResponseEntity<String> handleUserAlreadExist(){
+		return new ResponseEntity<>("user exists",HttpStatus.BAD_REQUEST);
+	}
 	
 	
 	

@@ -9,7 +9,7 @@ function SearchCourse() {
     const { courseId } = useParams();
     const [course, setCourse] = useState(null);
     const [error, setError] = useState(null);
-    const { userId, authToken } = useUserContext();
+    const { userId, authToken ,userRole} = useUserContext();
     const navigate = useNavigate();
     const [modalMessage, setModalMessage] = useState(""); // State for modal message
     const [showModal, setShowModal] = useState(false); // State to control modal visibility
@@ -60,9 +60,11 @@ function SearchCourse() {
                     <h1 className="card-title text-primary">{course.title}</h1>
                     <p className="card-text text-muted">{course.description}</p>
                     <p className="card-text"><strong>Instructor:</strong> {course.instructorName}</p>
-                    <button onClick={handleEnroll} className="btn btn-success">
-                        Enroll
-                    </button>
+                    {userRole !== "ROLE_INSTRUCTOR" && (
+                        <button onClick={handleEnroll} className="btn btn-success">
+                            Enroll
+                        </button>
+                    )}
                 </div>
             </div>
             <Modal show={showModal} onHide={() => setShowModal(false)}>

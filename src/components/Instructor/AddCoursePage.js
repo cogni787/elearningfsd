@@ -41,6 +41,10 @@ const AddCoursePage = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if(!formData.title || !formData.description || !formData.contentURL) {
+            setErrorMessage('Please fill in all fields.');
+            return;
+        }
         if (!userId || !authToken) {
             setErrorMessage('User ID or authentication token is missing. Please log in again.');
             return;
@@ -83,9 +87,10 @@ const AddCoursePage = () => {
                                             name="title"
                                             value={formData.title}
                                             onChange={handleChange}
-                                            required
+                                           // Ensure required attribute
                                             className="form-control"
                                             placeholder="Enter course title"
+                                            required 
                                         />
                                     </div>
                                     <div className="mb-3">
@@ -94,10 +99,13 @@ const AddCoursePage = () => {
                                             name="description"
                                             value={formData.description}
                                             onChange={handleChange}
-                                            required
+                                           
+                                             // Ensure required attribute
                                             className="form-control"
                                             placeholder="Enter course description"
                                             rows="4"
+                                            required
+
                                         />
                                     </div>
                                     <div className="mb-3">
@@ -107,9 +115,10 @@ const AddCoursePage = () => {
                                             name="contentURL"
                                             value={formData.contentURL}
                                             onChange={handleChange}
-                                            required
+                                            // Ensure required attribute
                                             className="form-control"
                                             placeholder="Enter content URL"
+                                            required
                                         />
                                     </div>
                                     <button type="submit" className="btn btn-primary w-100" onClick={handleSubmit}>Add Course</button>

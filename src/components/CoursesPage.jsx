@@ -8,7 +8,7 @@ import { Modal, Button } from 'react-bootstrap'; // Import Bootstrap Modal
 const CoursesPage = () => {
     const [courses, setCourses] = useState([]);
     const [error, setError] = useState(null);
-    const { userId, authToken} = useUserContext(); // Get userId, authToken, and role from context
+    const { userId, authToken, userRole } = useUserContext(); // Get userId, authToken, and role from context
     const [enrolledCourses, setEnrolledCourses] = useState(new Set()); // Track enrolled courses
     const Navigate = useNavigate();
     const [modalMessage, setModalMessage] = useState(""); // State for modal message
@@ -69,7 +69,9 @@ const CoursesPage = () => {
                         <div className="card h-100 shadow-sm border-0 bg-light hover-shadow"> {/* Ensure hover-shadow is applied */}
                             <div className="card-body d-flex flex-column">
                                 <h5 className="card-title text-primary">{course.title}</h5>
+
                                 {course.imageURL && (
+                                    
                                             <img 
                                                 src={course.imageURL} 
                                                 alt={course.title} 
@@ -80,16 +82,16 @@ const CoursesPage = () => {
                                 <p className="card-text text-muted">{course.description}</p>
                                 <p className="card-text"><strong>Instructor:</strong> {course.instructorName}</p>
                                 <div className="mt-auto">
-                                    {/* Show enroll button only if the user is a student */}
-                            
+                                    {/* Show enroll button only if the user is not an instructor */}
+                                    {userRole !== "ROLE_INSTRUCTOR" && (
                                         <button 
                                             onClick={() => handleEnroll(course.courseId)} 
                                             className="btn btn-success" 
                                             disabled={enrolledCourses.has(course.courseId)}
                                         >
-                                        {(    enrolledCourses.has(course.courseId) ? 'Enrolled' : 'Enroll'
-                                       )}
-                                     </button>
+                                            {enrolledCourses.has(course.courseId) ? 'Enrolled' : 'Enroll'}
+                                        </button>
+                                    )}
                                 </div>
                             </div>
                         </div>

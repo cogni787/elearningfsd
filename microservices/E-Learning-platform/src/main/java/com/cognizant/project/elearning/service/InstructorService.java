@@ -12,8 +12,11 @@ import com.cognizant.project.elearning.dto.InstructorResponseDTO;
 import com.cognizant.project.elearning.dto.RegisterRequestDTO;
 import com.cognizant.project.elearning.dto.RegisterResponseDTO;
 import com.cognizant.project.elearning.entity.Instructor;
+import com.cognizant.project.elearning.entity.User;
+import com.cognizant.project.elearning.exception.AllException.EmailAlreadyRegistered;
 import com.cognizant.project.elearning.exception.AllException.InstructorDetailNotFound;
 import com.cognizant.project.elearning.repository.InstructorRepository;
+import com.cognizant.project.elearning.repository.UserRepository;
 
 @Service
 public class InstructorService {
@@ -21,10 +24,16 @@ public class InstructorService {
 	ModelMapper modelMapper;
 	@Autowired
 	InstructorRepository instructorRepository ;
+	@Autowired
+	UserRepository userRepository;
 
 	BCryptPasswordEncoder encoder=new BCryptPasswordEncoder(12);
 
 	public RegisterResponseDTO addInstructor(RegisterRequestDTO registerRequestDTO){
+		Optional<User> user=userRepository.findByEmail(registerRequestDTO.getEmail());
+		if(user.isPresent()) {
+			throw new EmailAlreadyRegistered();
+		}
 		
 		Instructor instructor= modelMapper.map(registerRequestDTO,Instructor.class);
 		instructor.setPassword(encoder.encode(instructor.getPassword()));

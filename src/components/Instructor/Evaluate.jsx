@@ -41,6 +41,11 @@ const Evaluate = () => {
     }, [assessmentId, submissionId, authToken, userId,navigate]);
 
     const handleMarksSubmit = () => {
+        if (marks <=0 || marks > submissionDetails.maxScore) {
+            alert(`Marks must be from 1 to ${submissionDetails.maxScore}.`);
+            return; // Prevent submission if validation fails
+        }
+
         axios
             .put(`${BASE_URL}/${userId}/submission/${submissionId}/grade/${marks}`, null, {
                 headers: {
@@ -70,10 +75,12 @@ const Evaluate = () => {
                         <p><strong>Answer:</strong> {submissionDetails.answer}</p>
                         <div className="mt-3">
                             <input
-                                type="text"
+                                type="number"
                                 value={marks}
                                 onChange={(e) => setMarks(e.target.value)}
                                 placeholder="Enter marks"
+                                min="0" // Set minimum score to 0
+                                max={submissionDetails.maxScore} // Dynamically set maximum score
                                 className="form-control d-inline-block w-auto"
                                 disabled={isAssigned} // Disable the input if marks are assigned
                             />

@@ -35,6 +35,10 @@ const AddAssessmentPage = () => {
     const handleSubmit = async (e) => {
         console.log('Form Data:', formData); // Debugging log
         e.preventDefault();
+        if (formData.maxScore < 0) {
+            alert('Max Score cannot be negative. Please enter a value greater than or equal to 0.');
+            return;
+        }
         if (!userId || !authToken || !courseId) {
             setMessage('User ID, course ID, or authentication token is missing. Please log in again.');
             return;

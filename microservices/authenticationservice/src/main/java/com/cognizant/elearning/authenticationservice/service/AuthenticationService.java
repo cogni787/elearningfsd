@@ -9,6 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.cognizant.elearning.authenticationservice.ElearningClient;
+import com.cognizant.elearning.authenticationservice.UserAlReadyExist;
 import com.cognizant.elearning.authenticationservice.UserDetailsMismatch;
 import com.cognizant.elearning.authenticationservice.dto.LoginRequestDTO;
 import com.cognizant.elearning.authenticationservice.dto.LoginResponseDTO;
@@ -34,43 +35,41 @@ public class AuthenticationService {
 	BCryptPasswordEncoder encoder=new BCryptPasswordEncoder(12);
 	public RegisterResponseDTO register(RegisterRequestDTO registerRequestDTO) {
 		
-		
+		try {
 		
 		if(registerRequestDTO.getRole().name().equals("ROLE_STUDENT")) {
 			return elearningClient.addStudent(registerRequestDTO).getBody();
 		}
 		else if(registerRequestDTO.getRole().name().equals("ROLE_INSTRUCTOR")) {
 			return elearningClient.addInstructor(registerRequestDTO).getBody();
-		}
-		else
-		{
-		//throw some exception later
-			
-		
-			
+		}}
+		catch(Exception e) {
+			throw new UserAlReadyExist();
 		}
 		return null;
+		
 		
 	
 	}
 	public LoginResponseDTO login(LoginRequestDTO loginRequestDTO) {
+		try {
 		LoginResponseDTO loginResponseDTO=null;
-RegisterResponseDTO reg=elearningClient.getUserDetail(loginRequestDTO).getBody();
-loginResponseDTO=modelMapper.map(reg, LoginResponseDTO.class);
-User user=modelMapper.map(reg, User.class);
-try {
+		RegisterResponseDTO reg=elearningClient.getUserDetail(loginRequestDTO).getBody();
+		loginResponseDTO=modelMapper.map(reg, LoginResponseDTO.class);
+		User user=modelMapper.map(reg, User.class);
 
-				authenticationManager.authenticate(
-			new UsernamePasswordAuthenticationToken(loginRequestDTO.getEmail(),loginRequestDTO.getPassword()));
-	
-				loginResponseDTO.setToken( jwtService.generateToken(user));
+
+		authenticationManager.authenticate(
+	new UsernamePasswordAuthenticationToken(loginRequestDTO.getEmail(),loginRequestDTO.getPassword()));
+
+		loginResponseDTO.setToken( jwtService.generateToken(user));
 				
 				
 				return loginResponseDTO;
-}
-catch(Exception e) {
-throw new UserDetailsMismatch();
-}
+		}
+		catch(Exception e) {
+		throw new UserDetailsMismatch();
+		}
 
 
 	}

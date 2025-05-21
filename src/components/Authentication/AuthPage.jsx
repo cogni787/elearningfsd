@@ -7,7 +7,7 @@ import { useUserContext } from '../../context/UserContext'; // Corrected import 
 const API_BASE_URL = 'http://localhost:20001/authenticationservice/api/auth'; // Update this if the backend runs on a different port
  
 // Reusable Input Component
-const InputField = ({ label, type, name, value, onChange }) => {
+const InputField = ({ label, type, name, value, onChange ,required,min,max}) => {
     return (
         <div className="input-group">
             <label htmlFor={name}>{label}</label>
@@ -17,6 +17,9 @@ const InputField = ({ label, type, name, value, onChange }) => {
                 name={name}
                 value={value}
                 onChange={onChange}
+                required={required}
+                minLength={min}
+                maxLength={max}
                 placeholder={`Enter your ${label.toLowerCase()}`}
             />
         </div>
@@ -64,7 +67,12 @@ const LoginForm = ({ onLogin }) => {
             onLogin(response.data);
         } catch (error) {
             console.error("Error:", error);
-            setErrorMessage(error.response?.data?.message || "Login Failed"); // Set modal message
+            if(error.response?.status === 400) {
+ 
+                alert("Invalid credentials");
+                window.location.reload();
+            }
+            // Set modal message
         }
     };
  
@@ -76,12 +84,14 @@ const LoginForm = ({ onLogin }) => {
                     label="Email"
                     type="email"
                     name="email"
+                    required={true}
                     onChange={handleUpdate}
                 />
                 <InputField
                     label="Password"
                     type="password"
                     name="password"
+                    required={true}
                     onChange={handleUpdate}
                 />
                 <button type="submit" className="form-button">Login</button>
@@ -96,7 +106,7 @@ const RegisterForm = ({ onRegister }) => {
         name: "",
         email: "",
         password: "",
-        role: "ROLE_STUDENT"
+        role: ""
     });
     const [errorMessage, setErrorMessage] = useState(null); // State for modal message
     const navigate = useNavigate();
@@ -120,8 +130,15 @@ const RegisterForm = ({ onRegister }) => {
                 onRegister(); // Notify parent of successful registration
             }
         } catch (error) {
-            console.error("Error:", error);
-            setErrorMessage(error.response?.data?.message || "Failed to register"); // Set modal message
+            console.error("Error:", error.response);
+            if (error.response?.status === 400) {
+                alert("User already exists");
+                window.location.reload(); // Reload the page
+                console.log("User already exists");
+            } else {
+                console.error("Error:", error);
+                setErrorMessage(error.response?.data?.message || "Failed to register"); // Set modal message
+            }
         }
     };
  
@@ -133,18 +150,24 @@ const RegisterForm = ({ onRegister }) => {
                     label="Username"
                     type="text"
                     name="name"
+                    required={true}
+                    min="4"
+                    max="50"
                     onChange={handleUpdate}
                 />
                 <InputField
                     label="Email"
                     type="email"
                     name="email"
+                    required={true}
                     onChange={handleUpdate}
                 />
                 <InputField
                     label="Password"
                     type="password"
                     name="password"
+                    required={true}
+                    min="4"
                     onChange={handleUpdate}
                 />
                 <div className="input-group">
@@ -153,8 +176,10 @@ const RegisterForm = ({ onRegister }) => {
                         id="role"
                         name="role"
                         value={user.role}
+                        required={true}
                         onChange={handleUpdate}
                     >
+                        <option value="" disabled>--Select--</option>
                         <option value="ROLE_STUDENT">Student</option>
                         <option value="ROLE_INSTRUCTOR">Instructor</option>
                     </select>
