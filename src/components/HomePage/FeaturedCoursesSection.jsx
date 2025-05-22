@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import CourseCard from '../CourseCard';
+import CourseCard from '../Course/CourseCard';
 import { enrollInCourse } from '../../services/enrollmentService';
 import { useUserContext } from '../../context/UserContext'; // Import useUserContext
 

@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { useUserContext } from '../../context/UserContext';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const BASE_URL = 'http://localhost:20001/elearning/api/instructors';
 
@@ -41,12 +43,12 @@ const InstructorPage = ({ user }) => {
 
             if (response.status === 200) {
                 setCourses(courses.filter(course => course.courseId !== courseId));
-                alert('Course deleted successfully!');
+                toast.success('Course deleted successfully!');
             } else {
-                alert('Failed to delete course. Please try again.');
+                toast.error('Failed to delete course. Please try again.');
             }
         } catch {
-            alert('An error occurred while deleting the course. Please try again.');
+            toast.error('An error occurred while deleting the course. Please try again.');
         }
     };
 
@@ -130,6 +132,7 @@ const InstructorPage = ({ user }) => {
                 <h2>Instructor Tools</h2>
                 <button onClick={handleAddCourse} className="btn btn-primary btn-lg mt-3">Create New Course</button>
             </div>
+            <ToastContainer />
         </div>
     );
 };

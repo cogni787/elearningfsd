@@ -26,7 +26,16 @@ const InputField = ({ label, type, name, value, onChange ,required,min,max}) => 
     );
 };
 
-
+const Modal = ({ message, onClose }) => {
+    return (
+        <div className="modal-overlay">
+            <div className="modal-content">
+                <p>{message}</p>
+                <button onClick={onClose} className="modal-close-button">Close</button>
+            </div>
+        </div>
+    );
+};
  
 // Login Form Component
 const LoginForm = ({ onLogin }) => {
@@ -38,7 +47,7 @@ const LoginForm = ({ onLogin }) => {
         email: "",
         password: ""
     });
-    const [setErrorMessage] = useState(null); // State for modal message
+    const [errorMessage, setErrorMessage] = useState(null); // State for modal message
 // console.log(user);
     function handleUpdate(e) {
         setUser({
@@ -68,9 +77,7 @@ const LoginForm = ({ onLogin }) => {
         } catch (error) {
             console.error("Error:", error);
             if(error.response?.status === 400) {
- 
-                alert("Invalid credentials");
-                window.location.reload();
+                setErrorMessage("Invalid credentials");
             }
             // Set modal message
         }
@@ -96,6 +103,12 @@ const LoginForm = ({ onLogin }) => {
                 />
                 <button type="submit" className="form-button">Login</button>
             </form>
+            {errorMessage && (
+                <Modal
+                    message={errorMessage}
+                    onClose={() => setErrorMessage(null)} // Close modal
+                />
+            )}
         </>
     );
 };
@@ -132,9 +145,7 @@ const RegisterForm = ({ onRegister }) => {
         } catch (error) {
             console.error("Error:", error.response);
             if (error.response?.status === 400) {
-                alert("User already exists");
-                window.location.reload(); // Reload the page
-                console.log("User already exists");
+                setErrorMessage("User already exists");
             } else {
                 console.error("Error:", error);
                 setErrorMessage(error.response?.data?.message || "Failed to register"); // Set modal message
@@ -186,6 +197,12 @@ const RegisterForm = ({ onRegister }) => {
                 </div>
                 <button type="submit" className="form-button">Register</button>
             </form>
+            {errorMessage && (
+                <Modal
+                    message={errorMessage}
+                    onClose={() => setErrorMessage(null)} // Close modal
+                />
+            )}
         </>
     );
 };

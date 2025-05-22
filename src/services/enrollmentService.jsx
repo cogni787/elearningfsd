@@ -14,7 +14,6 @@ export const enrollInCourse = async (userId, courseId, authToken) => {
     );
     return response.data;
 };
-
 export const getEnrolledCourses = async (userId, authToken) => {
     const response = await axios.get(`${API_BASE_URL}/${userId}/enrolled-courses`, {
         headers: {

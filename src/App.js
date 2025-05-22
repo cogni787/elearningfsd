@@ -10,12 +10,12 @@ import StudentPage from './components/Student/StudentPage';
 import InstructorPage from './components/Instructor/InstructorPage';
 import './App.css';
 import Footer from './components/StaticPage/Footer';
-import CoursesPage from './components/CoursesPage';
+import CoursesPage from './components/Course/CoursesPage';
 import AddCoursePage from './components/Instructor/AddCoursePage';
 import AddAssessmentPage from './components/Instructor/AddAssessmentPage';
 import { UserProvider } from './context/UserContext';
-import UpdateCoursePage from './components/Instructor/UpdateCoursePage';
-import ProfilePage from './components/Instructor/ProfilePage';
+import UpdateCoursePage from './components/Instructor/UpdateCoursePage.jsx';
+import ProfilePage from './components/Instructor/ProfilePage.jsx';
 import StudentProfile from './components/Student/StudentProfile';
 
 import AssessmentList from './components/Student/AssessmentList'; // Import AssessmentList

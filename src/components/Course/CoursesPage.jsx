@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Correct import for useNavigate
-import { getAllCourses } from '../services/courseService';
-import { enrollInCourse, getEnrolledCourses } from '../services/enrollmentService'; // Import getEnrolledCourses
-import { useUserContext } from '../context/UserContext'; // Import UserContext
+import { getAllCourses } from '../../services/courseService';
+import { enrollInCourse, getEnrolledCourses } from '../../services/enrollmentService'; // Import getEnrolledCourses
+import { useUserContext } from '../../context/UserContext'; // Import UserContext
 import { Modal, Button } from 'react-bootstrap'; // Import Bootstrap Modal
 
 const CoursesPage = () => {
@@ -29,7 +29,7 @@ const CoursesPage = () => {
     }, []);
     useEffect(() => {
         const fetchEnrolledCourses = async () => {
-            if(!userId || !authToken) return; // Check if userId and authToken are available
+            if(!userId || !authToken || userRole ==="ROLE_INSTRUCTOR") return; // Check if userId and authToken are available
                 try {
                     const enrolled = await getEnrolledCourses(userId, authToken); // Fetch enrolled courses
                     setEnrolledCourses(new Set(enrolled.map((course) => course.courseId))); // Update enrolledCourses
@@ -38,7 +38,7 @@ const CoursesPage = () => {
                 }
             };
             fetchEnrolledCourses();
-    }, [userId, authToken]); // Fetch enrolled courses when userId or authToken changes
+    }, [userId, authToken,userRole]); // Fetch enrolled courses when userId or authToken changes
 
     const handleEnroll = async (courseId) => {
         if (!userId || !authToken) {

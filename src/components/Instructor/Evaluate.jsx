@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { useUserContext } from '../../context/UserContext';
-import { Modal, Button } from 'react-bootstrap'; // Import Bootstrap Modal
+import { Modal, Button, Toast, ToastContainer } from 'react-bootstrap'; // Import Bootstrap Modal and Toast components
 
 const BASE_URL = 'http://localhost:20001/elearning/api/instructors';
 
@@ -17,6 +17,8 @@ const Evaluate = () => {
     const [isAssigned, setIsAssigned] = useState(false); // New state to track if marks are assigned
     const [modalMessage, setModalMessage] = useState(''); // State for modal message
     const [showModal, setShowModal] = useState(false); // State to control modal visibility
+    const [showToast, setShowToast] = useState(false); // State to control toast visibility
+    const [toastMessage, setToastMessage] = useState(''); // State for toast message
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -42,7 +44,8 @@ const Evaluate = () => {
 
     const handleMarksSubmit = () => {
         if (marks <=0 || marks > submissionDetails.maxScore) {
-            alert(`Marks must be from 1 to ${submissionDetails.maxScore}.`);
+            setToastMessage(`Marks must be from 1 to ${submissionDetails.maxScore}.`);
+            setShowToast(true); // Show toast for validation error
             return; // Prevent submission if validation fails
         }
 
@@ -110,6 +113,11 @@ const Evaluate = () => {
                     </Button>
                 </Modal.Footer>
             </Modal>
+            <ToastContainer position="top-end" className="p-3">
+                <Toast onClose={() => setShowToast(false)} show={showToast} delay={3000} autohide>
+                    <Toast.Body>{toastMessage}</Toast.Body>
+                </Toast>
+            </ToastContainer>
         </div>
     );
 };

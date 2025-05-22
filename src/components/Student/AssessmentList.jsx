@@ -12,7 +12,7 @@ function AssessmentList() {
     const { courseId, authToken, userId, setNumberOfAssessments } = useUserContext();
     const [viewSubmissions, setViewSubmissions] = useState(null); // State to track submissions for an assessment
     const navigate = useNavigate(); // Initialize navigate function
-    const [modalMessage, setModalMessage] = useState(""); // State for modal message
+    const [modalMessage] = useState(""); // State for modal message
     const [showModal, setShowModal] = useState(false); // State to control modal visibility
 
 

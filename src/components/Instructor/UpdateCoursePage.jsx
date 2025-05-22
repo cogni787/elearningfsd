@@ -20,7 +20,7 @@ const UpdateCoursePage = () => {
     const BASE_URL = 'http://localhost:20001/elearning/api/instructors';
 
     useEffect(() => {
-getCourseById(courseId).then((response) => {
+    getCourseById(courseId).then((response) => {
     setFormData({...formData,
         title: response.title,
         description: response.description,
@@ -35,7 +35,7 @@ getCourseById(courseId).then((response) => {
     };
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
+        e.preventDefault(); //HTML reload prevent
         if (!userId || !authToken || !courseId) {
              // Redirect to instructor page if courseId is not available
             return navigate('/instructor');
@@ -76,6 +76,7 @@ getCourseById(courseId).then((response) => {
                         onChange={handleChange}
                         className="form-control"
                         required
+                        
                     />
                 </div>
                 <div className="mb-3">

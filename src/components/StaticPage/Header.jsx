@@ -26,7 +26,7 @@ function Header({ onLogout, showAuthButtons = true }) {
             onLogout();
         }
         setShowLogoutModal(true);
-        setTimeout(()=>{ window.location.reload() },3000);
+        // setTimeout(()=>{ window.location.reload() },3000);
         // Show logout modal
     };
 

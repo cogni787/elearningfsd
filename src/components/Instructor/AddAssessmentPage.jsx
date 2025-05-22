@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUserContext } from '../../context/UserContext';
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const AddAssessmentPage = () => {
     const { userId, authToken, courseId } = useUserContext(); // Access courseId from context
@@ -36,7 +38,7 @@ const AddAssessmentPage = () => {
         console.log('Form Data:', formData); // Debugging log
         e.preventDefault();
         if (formData.maxScore < 0) {
-            alert('Max Score cannot be negative. Please enter a value greater than or equal to 0.');
+            toast.error('Max Score cannot be negative. Please enter a value greater than or equal to 0.');
             return;
         }
         if (!userId || !authToken || !courseId) {
@@ -96,6 +98,7 @@ const AddAssessmentPage = () => {
                 <button type="submit" className="btn btn-primary w-100">Add Assessment</button>
             </form>
             {message && <p className="mt-3 text-center">{message}</p>}
+            <ToastContainer />
         </div>
     );
 };
